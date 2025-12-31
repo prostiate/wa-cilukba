@@ -1,31 +1,40 @@
-import JSZip from 'jszip';
+import JSZip from "jszip";
 
 export const downloadExtension = async () => {
   const zip = new JSZip();
 
   // 1. MANIFEST.JSON
-  zip.file("manifest.json", JSON.stringify({
-    "manifest_version": 3,
-    "name": "WhatsApp Privacy Extension",
-    "version": "1.0",
-    "description": "Privacy tools for WhatsApp Web. Secure your screen.",
-    "permissions": ["storage", "activeTab", "scripting"],
-    "host_permissions": ["https://web.whatsapp.com/*"],
-    "action": {
-      "default_popup": "popup.html",
-      "default_icon": "icon.png"
-    },
-    "content_scripts": [
+  zip.file(
+    "manifest.json",
+    JSON.stringify(
       {
-        "matches": ["https://web.whatsapp.com/*"],
-        "js": ["content.js"],
-        "css": ["styles.css"]
-      }
-    ]
-  }, null, 2));
+        manifest_version: 3,
+        name: "WhatsApp Privacy Extension",
+        version: "1.1",
+        description: "Privacy tools for WhatsApp Web. Secure your screen.",
+        permissions: ["storage", "activeTab", "scripting"],
+        host_permissions: ["https://web.whatsapp.com/*"],
+        action: {
+          default_popup: "popup.html",
+          default_icon: "icon.png",
+        },
+        content_scripts: [
+          {
+            matches: ["https://web.whatsapp.com/*"],
+            js: ["content.js"],
+            css: ["styles.css"],
+          },
+        ],
+      },
+      null,
+      2
+    )
+  );
 
-  // 2. STYLES.CSS (FIXED ROBUST SELECTORS)
-  zip.file("styles.css", `
+  // 2. STYLES.CSS (FIXED ROBUST SELECTORS BASED ON USER DOM SNIPPET)
+  zip.file(
+    "styles.css",
+    `
     /* --- Privacy Extension Styles v1.0 --- */
     
     /* 1. Global Blur Helper */
@@ -41,16 +50,21 @@ export const downloadExtension = async () => {
 
     /* --- SIDEBAR --- */
     
-    /* Sidebar Names: Inside the chat list row, typically a span with dir="auto" or specific color classes */
-    /* Target: Chat list -> Row -> Content -> Title */
-    body.wa-blur-sidebar-name div[aria-label="Chat list"] span[title] {
+    /* 
+       Sidebar Structure Logic:
+       Row -> Avatar Col (1) + Text Col (2)
+       Text Col -> Name Row (1) + Message Row (2)
+    */
+
+    /* Sidebar Names: First row of the text column */
+    body.wa-blur-sidebar-name div[aria-label="Chat list"] div[role="row"] > div:last-child > div:first-child span[title] {
         filter: blur(5px) !important;
     }
-    body.wa-hover-reveal.wa-blur-sidebar-name div[aria-label="Chat list"] span[title]:hover {
+    body.wa-hover-reveal.wa-blur-sidebar-name div[aria-label="Chat list"] div[role="row"] > div:last-child > div:first-child span[title]:hover {
         filter: none !important;
     }
 
-    /* Sidebar Photos */
+    /* Sidebar Photos: Images inside Chat List */
     body.wa-blur-sidebar-photo div[aria-label="Chat list"] img {
         filter: blur(5px) !important;
     }
@@ -58,11 +72,12 @@ export const downloadExtension = async () => {
         filter: none !important;
     }
 
-    /* Sidebar Preview Message */
-    body.wa-blur-sidebar-preview div[aria-label="Chat list"] span[dir="auto"] {
+    /* Sidebar Preview: Last row of the text column */
+    /* Targets the span[title] inside the message wrapper */
+    body.wa-blur-sidebar-preview div[aria-label="Chat list"] div[role="row"] > div:last-child > div:last-child span[title] {
         filter: blur(4px) !important;
     }
-    body.wa-hover-reveal.wa-blur-sidebar-preview div[aria-label="Chat list"] span[dir="auto"]:hover {
+    body.wa-hover-reveal.wa-blur-sidebar-preview div[aria-label="Chat list"] div[role="row"] > div:last-child > div:last-child span[title]:hover {
         filter: none !important;
     }
 
@@ -120,10 +135,13 @@ export const downloadExtension = async () => {
     body.wa-hover-reveal.wa-blur-chat-group-participant .message-in:hover div[role="button"] > span[dir="auto"] {
         filter: none !important;
     }
-  `);
+  `
+  );
 
   // 3. CONTENT.JS
-  zip.file("content.js", `
+  zip.file(
+    "content.js",
+    `
     console.log("WhatsApp Privacy Extension v1.0: Loaded");
 
     const defaultState = {
@@ -184,10 +202,13 @@ export const downloadExtension = async () => {
              updateDOM();
         }
     });
-  `);
+  `
+  );
 
   // 4. POPUP.HTML (REFINED LAYOUT 680px)
-  zip.file("popup.html", `
+  zip.file(
+    "popup.html",
+    `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -413,10 +434,13 @@ export const downloadExtension = async () => {
         <script src="popup.js"></script>
     </body>
     </html>
-  `);
+  `
+  );
 
   // 5. POPUP.JS
-  zip.file("popup.js", `
+  zip.file(
+    "popup.js",
+    `
     const keys = [
         'enableExtension', 
         'sidebarBlurName', 'sidebarBlurPhoto', 'sidebarBlurPreview',
@@ -469,18 +493,23 @@ export const downloadExtension = async () => {
             chrome.storage.local.set({ privacySettings: newSettings });
         });
     });
-  `);
+  `
+  );
 
   // 6. ICON.PNG
-  zip.file("icon.png", "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", {base64: true});
+  zip.file(
+    "icon.png",
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+    { base64: true }
+  );
 
   // GENERATE ZIP
-  const blob = await zip.generateAsync({type:"blob"});
+  const blob = await zip.generateAsync({ type: "blob" });
   const url = URL.createObjectURL(blob);
-  
+
   const link = document.createElement("a");
   link.href = url;
-  link.download = "whatsapp-privacy-v1.zip";
+  link.download = "whatsapp-privacy-v1.0.zip";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
