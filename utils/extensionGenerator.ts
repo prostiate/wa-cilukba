@@ -1,31 +1,40 @@
-import JSZip from 'jszip';
+import JSZip from "jszip";
 
 export const downloadExtension = async () => {
   const zip = new JSZip();
 
   // 1. MANIFEST.JSON
-  zip.file("manifest.json", JSON.stringify({
-    "manifest_version": 3,
-    "name": "WA Cilukba",
-    "version": "1.0.0",
-    "description": "Privacy tools for WhatsApp Web. Peek-a-boo your chats.",
-    "permissions": ["storage", "activeTab", "scripting"],
-    "host_permissions": ["https://web.whatsapp.com/*"],
-    "action": {
-      "default_popup": "popup.html",
-      "default_icon": "icon.png"
-    },
-    "content_scripts": [
+  zip.file(
+    "manifest.json",
+    JSON.stringify(
       {
-        "matches": ["https://web.whatsapp.com/*"],
-        "js": ["content.js"],
-        "css": ["styles.css"]
-      }
-    ]
-  }, null, 2));
+        manifest_version: 3,
+        name: "WA Cilukba",
+        version: "1.0.0",
+        description: "Privacy tools for WhatsApp Web. Peek-a-boo your chats.",
+        permissions: ["storage", "activeTab", "scripting"],
+        host_permissions: ["https://web.whatsapp.com/*"],
+        action: {
+          default_popup: "popup.html",
+          default_icon: "icon.png",
+        },
+        content_scripts: [
+          {
+            matches: ["https://web.whatsapp.com/*"],
+            js: ["content.js"],
+            css: ["styles.css"],
+          },
+        ],
+      },
+      null,
+      2
+    )
+  );
 
   // 2. STYLES.CSS (PRESERVED ROBUST SELECTORS)
-  zip.file("styles.css", `
+  zip.file(
+    "styles.css",
+    `
     /* --- WA Cilukba Styles v1.0.0 --- */
     
     /* 1. Global Blur Helper */
@@ -41,52 +50,62 @@ export const downloadExtension = async () => {
 
     /* --- SIDEBAR --- */
     
-    /* Sidebar Names: First row of the text column */
-    body.wa-blur-sidebar-name div[aria-label="Chat list"] div[role="row"] > div:last-child > div:first-child span[title] {
+    /* Sidebar Names */
+    body.wa-blur-sidebar-name div[aria-label="Chat list"] span[dir="auto"][title],
+    body.wa-blur-sidebar-name div[aria-label="Chat list"] div[role="gridcell"] div.xuxw1ft span[title] {
         filter: blur(5px) !important;
     }
-    body.wa-hover-reveal.wa-blur-sidebar-name div[aria-label="Chat list"] div[role="row"] > div:last-child > div:first-child span[title]:hover {
+    body.wa-hover-reveal.wa-blur-sidebar-name div[aria-label="Chat list"] span[dir="auto"][title]:hover,
+    body.wa-hover-reveal.wa-blur-sidebar-name div[aria-label="Chat list"] div[role="gridcell"] div.xuxw1ft span[title]:hover {
         filter: none !important;
     }
 
-    /* Sidebar Photos: Images inside Chat List */
-    body.wa-blur-sidebar-photo div[aria-label="Chat list"] img {
-        filter: blur(5px) !important;
+    /* Sidebar Photos */
+    body.wa-blur-sidebar-photo div[aria-label="Chat list"] img,
+    body.wa-blur-sidebar-photo div[aria-label="Chat list"] ._ak8h img {
+        filter: blur(8px) !important;
     }
-    body.wa-hover-reveal.wa-blur-sidebar-photo div[aria-label="Chat list"] img:hover {
+    body.wa-hover-reveal.wa-blur-sidebar-photo div[aria-label="Chat list"] img:hover,
+    body.wa-hover-reveal.wa-blur-sidebar-photo div[aria-label="Chat list"] ._ak8h img:hover {
         filter: none !important;
     }
 
-    /* Sidebar Preview: Last row of the text column */
-    body.wa-blur-sidebar-preview div[aria-label="Chat list"] div[role="row"] > div:last-child > div:last-child span[title] {
-        filter: blur(4px) !important;
+    /* Sidebar Preview Text */
+    body.wa-blur-sidebar-preview div[aria-label="Chat list"] ._ak8j span[title],
+    body.wa-blur-sidebar-preview div[aria-label="Chat list"] ._ak8j span[dir="ltr"] {
+        filter: blur(5px) !important;
     }
-    body.wa-hover-reveal.wa-blur-sidebar-preview div[aria-label="Chat list"] div[role="row"] > div:last-child > div:last-child span[title]:hover {
+    body.wa-hover-reveal.wa-blur-sidebar-preview div[aria-label="Chat list"] ._ak8j span[title]:hover,
+    body.wa-hover-reveal.wa-blur-sidebar-preview div[aria-label="Chat list"] ._ak8j span[dir="ltr"]:hover {
         filter: none !important;
     }
 
     /* --- ACTIVE CHAT --- */
 
-    /* Messages */
-    body.wa-blur-chat-message .message-in span.selectable-text,
-    body.wa-blur-chat-message .message-out span.selectable-text,
+    /* Messages: Text */
+    body.wa-blur-chat-message .message-in span[data-testid="selectable-text"],
+    body.wa-blur-chat-message .message-out span[data-testid="selectable-text"],
     body.wa-blur-chat-message .message-in span[dir="ltr"],
-    body.wa-blur-chat-message .message-out span[dir="ltr"] {
-        filter: blur(5px) !important;
+    body.wa-blur-chat-message .message-out span[dir="ltr"],
+    body.wa-blur-chat-message .message-in ._akbu,
+    body.wa-blur-chat-message .message-out ._akbu {
+        filter: blur(6px) !important;
         user-select: none;
     }
-    body.wa-hover-reveal.wa-blur-chat-message .message-in:hover span,
-    body.wa-hover-reveal.wa-blur-chat-message .message-out:hover span {
+    body.wa-hover-reveal.wa-blur-chat-message .message-in:hover span[data-testid="selectable-text"],
+    body.wa-hover-reveal.wa-blur-chat-message .message-out:hover span[data-testid="selectable-text"],
+    body.wa-hover-reveal.wa-blur-chat-message .message-in:hover ._akbu,
+    body.wa-hover-reveal.wa-blur-chat-message .message-out:hover ._akbu {
         filter: none !important;
         user-select: text;
     }
 
     /* Chat Media */
-    body.wa-blur-chat-media .message-in img[src^="blob:"],
-    body.wa-blur-chat-media .message-out img[src^="blob:"],
+    body.wa-blur-chat-media .message-in img,
+    body.wa-blur-chat-media .message-out img,
     body.wa-blur-chat-media .message-in video,
     body.wa-blur-chat-media .message-out video {
-        filter: blur(15px) !important;
+        filter: blur(20px) !important;
     }
     body.wa-hover-reveal.wa-blur-chat-media .message-in:hover img,
     body.wa-hover-reveal.wa-blur-chat-media .message-out:hover img {
@@ -94,32 +113,38 @@ export const downloadExtension = async () => {
     }
 
     /* Chat Header: Name */
-    body.wa-blur-chat-name header span[title] {
+    body.wa-blur-chat-name header span[title],
+    body.wa-blur-chat-name header .x1iyjqo2 {
         filter: blur(6px) !important;
     }
-    body.wa-hover-reveal.wa-blur-chat-name header span[title]:hover {
+    body.wa-hover-reveal.wa-blur-chat-name header:hover span[title],
+    body.wa-hover-reveal.wa-blur-chat-name header:hover .x1iyjqo2 {
         filter: none !important;
     }
 
     /* Chat Header: Photo */
     body.wa-blur-chat-photo header img {
-        filter: blur(5px) !important;
+        filter: blur(8px) !important;
     }
     body.wa-hover-reveal.wa-blur-chat-photo header img:hover {
         filter: none !important;
     }
 
     /* Group Participant Names */
-    body.wa-blur-chat-group-participant .message-in div[role="button"] > span[dir="auto"] {
+    body.wa-blur-chat-group-participant .message-in ._ahxj span,
+    body.wa-blur-chat-group-participant .message-in span[dir="auto"] {
         filter: blur(5px) !important;
     }
-    body.wa-hover-reveal.wa-blur-chat-group-participant .message-in:hover div[role="button"] > span[dir="auto"] {
+    body.wa-hover-reveal.wa-blur-chat-group-participant .message-in:hover ._ahxj span {
         filter: none !important;
     }
-  `);
+  `
+  );
 
   // 3. CONTENT.JS
-  zip.file("content.js", `
+  zip.file(
+    "content.js",
+    `
     console.log("WA Cilukba v1.0.0: Loaded");
 
     const defaultState = {
@@ -176,10 +201,13 @@ export const downloadExtension = async () => {
              updateDOM();
         }
     });
-  `);
+  `
+  );
 
   // 4. POPUP.HTML
-  zip.file("popup.html", `
+  zip.file(
+    "popup.html",
+    `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -282,10 +310,13 @@ export const downloadExtension = async () => {
         <script src="popup.js"></script>
     </body>
     </html>
-  `);
+  `
+  );
 
   // 5. POPUP.JS
-  zip.file("popup.js", `
+  zip.file(
+    "popup.js",
+    `
     const keys = ['enableExtension', 'sidebarBlurName', 'sidebarBlurPhoto', 'sidebarBlurPreview', 'chatBlurMessage', 'chatBlurMedia', 'chatBlurName', 'chatBlurPhoto', 'chatBlurGroupParticipant', 'hoverToReveal'];
     const defaultSettings = { enableExtension: true, hoverToReveal: true, sidebarBlurName: false, sidebarBlurPhoto: true, sidebarBlurPreview: true, chatBlurName: false, chatBlurPhoto: true, chatBlurMessage: true, chatBlurMedia: true, chatBlurGroupParticipant: true };
     chrome.storage.local.get(['privacySettings'], (result) => {
@@ -308,12 +339,17 @@ export const downloadExtension = async () => {
             chrome.storage.local.set({ privacySettings: newSettings });
         });
     });
-  `);
+  `
+  );
 
   // 6. ICON.PNG
-  zip.file("icon.png", "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", {base64: true});
+  zip.file(
+    "icon.png",
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+    { base64: true }
+  );
 
-  const blob = await zip.generateAsync({type:"blob"});
+  const blob = await zip.generateAsync({ type: "blob" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
