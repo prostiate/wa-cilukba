@@ -1,6 +1,6 @@
 import JSZip from "jszip";
 
-export const downloadExtension = async () => {
+export const createExtensionZip = async () => {
   const zip = new JSZip();
 
   // 1. MANIFEST.JSON
@@ -400,7 +400,7 @@ export const downloadExtension = async () => {
         <script src="popup.js"></script>
     </body>
     </html>
-  `
+    `
   );
 
   // 5. POPUP.JS
@@ -439,6 +439,11 @@ export const downloadExtension = async () => {
     { base64: true }
   );
 
+  return zip;
+};
+
+export const downloadExtension = async () => {
+  const zip = await createExtensionZip();
   const blob = await zip.generateAsync({ type: "blob" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");

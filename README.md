@@ -46,6 +46,39 @@ WA Cilukba is a privacy-focused browser extension for WhatsApp Web. It automatic
 5. Click **"Load unpacked"** and select the folder you unzipped in step 2.
 6. Open [WhatsApp Web](https://web.whatsapp.com) and start peeking!
 
+## 🌐 Deployment to GitHub Pages
+
+This project is configured for easy deployment to GitHub Pages using GitHub Actions.
+
+1. Push your code to the `main` branch.
+2. The GitHub Action will automatically build and deploy the demo to `https://prostiate.github.io/wa-cilukba/`.
+3. Ensure your repository settings have GitHub Pages source set to the `gh-pages` branch.
+
+## 📦 Automated Releases
+
+You can generate the extension zip file locally or via GitHub Releases.
+
+### Local Generation
+
+Run the following command to generate `WA-Cilukba-v1.0.0.zip`:
+
+```bash
+npm run build:extension
+```
+
+### GitHub Releases
+
+The included GitHub Action automatically attaches the extension zip to any tag matching `v*` (e.g., `v1.0.0`).
+
+1. Create and push a tag:
+
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+
+2. The zip will be available as an asset in the "Releases" section of your GitHub repository.
+
 ## 🤝 Contributing & Open Source
 
 This project is open-source and welcomes contributions!
