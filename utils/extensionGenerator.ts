@@ -219,7 +219,7 @@ export const downloadExtension = async () => {
   `
   );
 
-  // 4. POPUP.HTML
+  // 4. POPUP.HTML (SYNCHRONIZED WITH CONTROLPANEL.TSX)
   zip.file(
     "popup.html",
     `
@@ -229,7 +229,7 @@ export const downloadExtension = async () => {
         <meta charset="UTF-8">
         <style>
             body { 
-                width: 680px; 
+                width: 720px; 
                 margin: 0; 
                 padding: 0; 
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
@@ -237,91 +237,166 @@ export const downloadExtension = async () => {
                 color: #334155;
             }
             .header { 
-                background: linear-gradient(135deg, #0d9488, #0f766e); 
+                background: #0d9488; 
                 color: white; 
-                padding: 16px 20px; 
+                padding: 20px; 
                 display: flex; align-items: center; justify-content: space-between;
                 box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
             }
             .header-brand { display: flex; align-items: center; gap: 10px; }
-            .header h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: 0.5px; }
-            .header-status { font-size: 11px; background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 99px; }
+            .header h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+            .header-sub { font-size: 12px; opacity: 0.9; margin-top: 2px; }
             .dashboard { 
-                display: grid; grid-template-columns: 170px 1fr 1fr 160px; gap: 12px; padding: 16px; box-sizing: border-box;
+                display: grid; grid-template-columns: 200px 1fr 1fr; gap: 16px; padding: 20px; box-sizing: border-box;
             }
-            .col { display: flex; flex-direction: column; gap: 10px; }
-            .col-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; font-weight: 700; padding-left: 4px; }
-            .card { background: white; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; overflow: hidden; }
-            .master-card { background: #f0fdfa; border: 1px solid #ccfbf1; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; box-sizing: border-box; }
-            .master-btn { width: 44px; height: 44px; background: #0d9488; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-bottom: 12px; box-shadow: 0 4px 6px rgba(13, 148, 136, 0.3); }
-            .master-status-text { font-weight: 700; color: #115e59; font-size: 14px; margin-bottom: 4px; }
-            .master-shortcut { font-size: 11px; color: #0f766e; opacity: 0.8; margin-bottom: 16px; }
-            .item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-bottom: 1px solid #f1f5f9; transition: background 0.1s; }
+            .col { display: flex; flex-direction: column; gap: 16px; }
+            .col-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+            .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; overflow: hidden; }
+            .master-card { background: #f0fdfa; border: 1px solid #ccfbf1; padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; box-sizing: border-box; }
+            .master-btn { width: 48px; height: 48px; background: #0d9488; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(13, 148, 136, 0.4); }
+            .master-title { font-weight: 700; color: #115e59; font-size: 14px; margin-bottom: 4px; }
+            .master-desc { font-size: 11px; color: #0f766e; opacity: 0.8; margin-bottom: 20px; }
+            
+            .item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid #f1f5f9; transition: background 0.2s; }
             .item:last-child { border-bottom: none; }
             .item:hover { background: #f8fafc; }
-            .item-content { display: flex; flex-direction: column; }
-            .item-label { font-size: 12px; font-weight: 500; color: #1e293b; }
-            .item-sub { font-size: 10px; color: #94a3b8; margin-top: 2px; }
-            .switch { position: relative; display: inline-block; width: 32px; height: 18px; flex-shrink: 0; }
+            .item-content { display: flex; flex-direction: column; flex: 1; padding-right: 12px; }
+            .item-label { font-size: 13px; font-weight: 500; color: #1e293b; }
+            .item-sub { font-size: 11px; color: #64748b; margin-top: 2px; line-height: 1.3; }
+            
+            .switch { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
             .switch input { opacity: 0; width: 0; height: 0; }
             .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 34px; }
-            .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+            .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
             input:checked + .slider { background-color: #0d9488; }
-            input:checked + .slider:before { transform: translateX(14px); }
-            input:disabled + .slider { opacity: 0.5; cursor: not-allowed; }
-            .footer { text-align: center; padding: 12px; color: #94a3b8; font-size: 10px; border-top: 1px solid #e2e8f0; background: white; }
+            input:checked + .slider:before { transform: translateX(16px); }
+            input:disabled + .slider { opacity: 0.4; cursor: not-allowed; }
+            
+            .footer { padding: 16px; color: #94a3b8; font-size: 11px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; background: white; }
         </style>
     </head>
     <body>
         <div class="header">
             <div class="header-brand">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <h1>WA Cilukba</h1>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <div>
+                    <h1>WA Cilukba</h1>
+                    <div class="header-sub">Peek-a-boo for WhatsApp Web</div>
+                </div>
             </div>
-            <span class="header-status">v1.0.0</span>
+            <div style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 600;">v1.0.0</div>
         </div>
+        
         <div class="dashboard">
+            <!-- MASTER SWITCH -->
             <div class="col">
                 <div class="card master-card">
-                    <div class="master-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg></div>
-                    <div class="master-status-text">Privacy Mode</div>
-                    <div class="master-shortcut">Shortcut: Alt + X</div>
-                    <label class="switch" style="width: 40px; height: 22px;">
+                    <div class="master-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div class="master-title">Privacy Features</div>
+                    <div class="master-desc">Master Switch (Alt+X)</div>
+                    <label class="switch" style="width: 44px; height: 24px;">
                         <input type="checkbox" id="enableExtension">
-                        <span class="slider" style="border-radius: 22px;"></span>
-                        <style>#enableExtension:checked + .slider:before { transform: translateX(18px); } .master-card .slider:before { width: 18px; height: 18px; }</style>
+                        <span class="slider" style="border-radius: 24px;"></span>
+                        <style>#enableExtension:checked + .slider:before { transform: translateX(20px); } .master-card .slider:before { width: 20px; height: 20px; }</style>
                     </label>
                 </div>
             </div>
+
+            <!-- SIDEBAR GROUP -->
             <div class="col">
-                <div class="col-title">Sidebar List</div>
+                <div class="col-title">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+                    Left Sidebar (Chat List)
+                </div>
                 <div class="card">
-                    <div class="item"><span class="item-label">Blur Contact Names</span><label class="switch"><input type="checkbox" id="sidebarBlurName"><span class="slider"></span></label></div>
-                    <div class="item"><span class="item-label">Blur Profile Photos</span><label class="switch"><input type="checkbox" id="sidebarBlurPhoto"><span class="slider"></span></label></div>
-                    <div class="item"><div class="item-content"><span class="item-label">Blur Preview</span><span class="item-sub">Last message text</span></div><label class="switch"><input type="checkbox" id="sidebarBlurPreview"><span class="slider"></span></label></div>
+                    <div class="item">
+                        <div class="item-content"><span class="item-label">Blur Contact Names</span></div>
+                        <label class="switch"><input type="checkbox" id="sidebarBlurName"><span class="slider"></span></label>
+                    </div>
+                    <div class="item">
+                        <div class="item-content"><span class="item-label">Blur Profile Photos</span></div>
+                        <label class="switch"><input type="checkbox" id="sidebarBlurPhoto"><span class="slider"></span></label>
+                    </div>
+                    <div class="item">
+                        <div class="item-content">
+                            <span class="item-label">Blur Last Message</span>
+                            <span class="item-sub">Hide message previews</span>
+                        </div>
+                        <label class="switch"><input type="checkbox" id="sidebarBlurPreview"><span class="slider"></span></label>
+                    </div>
+                </div>
+                
+                <div class="col-title" style="margin-top: 8px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 6l-6 6 6 6"/><circle cx="12" cy="12" r="10"/></svg>
+                    Interactivity
+                </div>
+                <div class="card">
+                    <div class="item">
+                        <div class="item-content">
+                            <span class="item-label">Hover to Reveal</span>
+                            <span class="item-sub">Temporarily unblur on mouseover</span>
+                        </div>
+                        <label class="switch"><input type="checkbox" id="hoverToReveal"><span class="slider"></span></label>
+                    </div>
                 </div>
             </div>
+
+            <!-- ACTIVE CHAT GROUP -->
             <div class="col">
-                <div class="col-title">Active Chat</div>
-                <div class="card">
-                    <div class="item"><span class="item-label">Blur Messages</span><label class="switch"><input type="checkbox" id="chatBlurMessage"><span class="slider"></span></label></div>
-                    <div class="item"><div class="item-content"><span class="item-label">Blur Media</span><span class="item-sub">Images & Videos</span></div><label class="switch"><input type="checkbox" id="chatBlurMedia"><span class="slider"></span></label></div>
-                     <div class="item"><div class="item-content"><span class="item-label">Participants</span><span class="item-sub">Names in groups</span></div><label class="switch"><input type="checkbox" id="chatBlurGroupParticipant"><span class="slider"></span></label></div>
-                    <div class="item"><span class="item-label">Blur Header Name</span><label class="switch"><input type="checkbox" id="chatBlurName"><span class="slider"></span></label></div>
-                     <div class="item"><span class="item-label">Blur Header Photo</span><label class="switch"><input type="checkbox" id="chatBlurPhoto"><span class="slider"></span></label></div>
+                <div class="col-title">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Active Chat Content
                 </div>
-            </div>
-            <div class="col">
-                <div class="col-title">Settings</div>
                 <div class="card">
-                    <div class="item" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-                        <div class="item-content"><span class="item-label">Hover to Reveal</span><span class="item-sub">Unblur on mouseover</span></div>
-                        <div style="width: 100%; display: flex; justify-content: flex-end;"><label class="switch"><input type="checkbox" id="hoverToReveal"><span class="slider"></span></label></div>
+                    <div class="item">
+                        <div class="item-content"><span class="item-label">Blur Messages</span></div>
+                        <label class="switch"><input type="checkbox" id="chatBlurMessage"><span class="slider"></span></label>
+                    </div>
+                    <div class="item">
+                        <div class="item-content">
+                            <span class="item-label">Blur Media</span>
+                            <span class="item-sub">Images, Videos, Stickers</span>
+                        </div>
+                        <label class="switch"><input type="checkbox" id="chatBlurMedia"><span class="slider"></span></label>
+                    </div>
+                    <div class="item">
+                        <div class="item-content">
+                            <span class="item-label">Blur Header Name</span>
+                            <span class="item-sub">Chat Title</span>
+                        </div>
+                        <label class="switch"><input type="checkbox" id="chatBlurName"><span class="slider"></span></label>
+                    </div>
+                    <div class="item">
+                        <div class="item-content">
+                            <span class="item-label">Blur Header Photo</span>
+                            <span class="item-sub">Profile/Group Icon</span>
+                        </div>
+                        <label class="switch"><input type="checkbox" id="chatBlurPhoto"><span class="slider"></span></label>
+                    </div>
+                    <div class="item">
+                        <div class="item-content">
+                            <span class="item-label">Blur Group Participants</span>
+                            <span class="item-sub">Names inside chat bubbles</span>
+                        </div>
+                        <label class="switch"><input type="checkbox" id="chatBlurGroupParticipant"><span class="slider"></span></label>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="footer">WA Cilukba v1.0.0 • Open Source (MIT)</div>
+        
+        <div class="footer">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span>&copy; ${new Date().getFullYear()} WA Cilukba</span>
+                <span style="color: #cbd5e1;">•</span>
+                <a href="https://github.com/prostiate/wa-cilukba" target="_blank" style="color: #64748b; text-decoration: none; display: flex; align-items: center; gap: 4px; font-weight: 600;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    GitHub
+                </a>
+            </div>
+            <span style="font-weight: 600; color: #64748b;">MIT License</span>
+        </div>
         <script src="popup.js"></script>
     </body>
     </html>
