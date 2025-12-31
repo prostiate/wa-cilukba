@@ -1,11 +1,17 @@
 export interface PrivacySettings {
   enableExtension: boolean;
-  blurMessages: boolean;
-  blurPreviews: boolean;
-  blurMedia: boolean;
-  blurProfilePhotos: boolean;
-  blurNames: boolean;
   hoverToReveal: boolean;
+  
+  // Sidebar (Chat List)
+  sidebarBlurName: boolean;
+  sidebarBlurPhoto: boolean;
+  sidebarBlurPreview: boolean; // Last message preview
+  
+  // Active Chat
+  chatBlurName: boolean;
+  chatBlurPhoto: boolean;
+  chatBlurMessage: boolean;
+  chatBlurMedia: boolean;
 }
 
 export interface Contact {

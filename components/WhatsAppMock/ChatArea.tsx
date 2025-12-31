@@ -52,9 +52,9 @@ export const ChatArea: React.FC = () => {
       {/* Header */}
       <div className="h-16 bg-[#f0f2f5] px-4 py-2 flex justify-between items-center z-10 border-b border-gray-200">
         <div className="flex items-center cursor-pointer">
-          <Avatar src="https://picsum.photos/200?random=1" size="md" />
+          <Avatar src="https://picsum.photos/200?random=1" size="md" blurOverride={settings.chatBlurPhoto} />
           <div className="ml-3 flex flex-col">
-            <BlurText active={settings.blurNames} className="font-medium text-gray-900 leading-tight">
+            <BlurText active={settings.chatBlurName} className="font-medium text-gray-900 leading-tight">
               Alice Freeman
             </BlurText>
             <span className="text-xs text-gray-500">last seen today at 10:45 AM</span>
@@ -77,20 +77,20 @@ export const ChatArea: React.FC = () => {
             >
               {msg.isMedia && msg.image ? (
                 <div className="p-1 pb-0">
-                  <div className={`rounded overflow-hidden relative cursor-pointer group ${isExtensionActive && settings.blurMedia ? 'overflow-hidden' : ''}`}>
+                  <div className={`rounded overflow-hidden relative cursor-pointer group ${isExtensionActive && settings.chatBlurMedia ? 'overflow-hidden' : ''}`}>
                      <img 
                         src={msg.image} 
                         alt="Media" 
                         className={`w-full h-auto object-cover max-h-64 transition-all duration-300
-                            ${isExtensionActive && settings.blurMedia ? 'filter blur-[10px]' : ''}
-                            ${isExtensionActive && settings.blurMedia && canHover ? 'group-hover:filter-none' : ''}
+                            ${isExtensionActive && settings.chatBlurMedia ? 'filter blur-[10px]' : ''}
+                            ${isExtensionActive && settings.chatBlurMedia && canHover ? 'group-hover:filter-none' : ''}
                         `} 
                      />
                   </div>
                 </div>
               ) : (
                 <div className="px-2 pt-2 pb-1">
-                  <BlurText active={settings.blurMessages && msg.sender !== 'me'}>
+                  <BlurText active={settings.chatBlurMessage && msg.sender !== 'me'}>
                     {msg.text}
                   </BlurText>
                 </div>

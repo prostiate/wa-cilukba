@@ -4,12 +4,16 @@ import { usePrivacy } from '../../context/PrivacyContext';
 interface AvatarProps {
   src: string;
   size?: 'sm' | 'md' | 'lg';
+  blurOverride?: boolean; // If provided, controls blurring. If undefined, uses global default logic
 }
 
-export const Avatar: React.FC<AvatarProps> = ({ src, size = 'md' }) => {
+export const Avatar: React.FC<AvatarProps> = ({ src, size = 'md', blurOverride }) => {
   const { settings } = usePrivacy();
 
-  const isBlurred = settings.enableExtension && settings.blurProfilePhotos;
+  // If override is passed, use it. Otherwise assume generic blur setting (which we've removed in favor of explicit, but good for fallback)
+  const shouldBlur = blurOverride !== undefined ? blurOverride : false;
+  
+  const isBlurred = settings.enableExtension && shouldBlur;
   const canHover = settings.enableExtension && settings.hoverToReveal;
 
   const sizeClasses = {

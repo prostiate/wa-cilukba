@@ -1,60 +1,83 @@
 /* --- Privacy Extension Styles --- */
 
-/* Base Blur Class */
-.wa-privacy-blur {
+/* Global Blur Helper */
+.wa-blur-effect {
     filter: blur(6px) !important;
     transition: filter 0.2s ease !important;
-    cursor: pointer !important;
 }
-.wa-privacy-blur:hover {
+
+body.wa-hover-reveal .wa-blur-effect:hover {
     filter: blur(0px) !important;
 }
 
-/* 
-   Note: WhatsApp Web classes change frequently. 
-   We target generic attributes where possible.
-*/
+/* --- SIDEBAR SELECTORS (Heuristics) --- */
 
-/* Blur Images/Media */
-body.blur-media img[src^="blob:"],
-body.blur-media div[role="button"] img {
-    filter: blur(10px);
+/* Sidebar Names: Titles inside Chat List */
+body.wa-blur-sidebar-name div[aria-label="Chat list"] span[title] {
+    filter: blur(5px) !important;
     transition: 0.3s;
 }
-body.blur-media img[src^="blob:"]:hover,
-body.blur-media div[role="button"] img:hover {
-    filter: none;
+body.wa-hover-reveal.wa-blur-sidebar-name div[aria-label="Chat list"] span[title]:hover {
+    filter: none !important;
 }
 
-/* Blur Profile Pictures (Headers & Chat List) */
-body.blur-photos header img,
-body.blur-photos div[aria-label*="Chat list"] img {
-    filter: blur(6px);
+/* Sidebar Photos: Images inside Chat List */
+body.wa-blur-sidebar-photo div[aria-label="Chat list"] img {
+    filter: blur(5px) !important;
     transition: 0.3s;
 }
-body.blur-photos header img:hover,
-body.blur-photos div[aria-label*="Chat list"] img:hover {
-    filter: none;
+body.wa-hover-reveal.wa-blur-sidebar-photo div[aria-label="Chat list"] img:hover {
+    filter: none !important;
 }
 
-/* Blur Names */
-body.blur-names span[title],
-body.blur-names div[role="row"] span[dir="auto"] {
-    filter: blur(5px);
+/* Sidebar Preview: Secondary text in chat list rows */
+body.wa-blur-sidebar-preview div[aria-label="Chat list"] span[dir="auto"] {
+    filter: blur(4px) !important;
     transition: 0.3s;
 }
-body.blur-names span[title]:hover,
-body.blur-names div[role="row"] span[dir="auto"]:hover {
-    filter: none;
+ body.wa-hover-reveal.wa-blur-sidebar-preview div[aria-label="Chat list"] span[dir="auto"]:hover {
+    filter: none !important;
 }
 
-/* Blur Messages */
-body.blur-messages .message-in, 
-body.blur-messages .message-out {
-    filter: blur(5px);
+
+/* --- ACTIVE CHAT SELECTORS (Heuristics) --- */
+
+/* Chat Messages: Incoming/Outgoing bubbles */
+body.wa-blur-chat-message .message-in span.selectable-text, 
+body.wa-blur-chat-message .message-out span.selectable-text {
+    filter: blur(5px) !important;
     transition: 0.3s;
 }
-body.blur-messages .message-in:hover, 
-body.blur-messages .message-out:hover {
-    filter: none;
+body.wa-hover-reveal.wa-blur-chat-message .message-in:hover span.selectable-text, 
+body.wa-hover-reveal.wa-blur-chat-message .message-out:hover span.selectable-text {
+    filter: none !important;
+}
+
+/* Chat Media: Images/Videos */
+body.wa-blur-chat-media div[role="application"] img, 
+body.wa-blur-chat-media div[role="application"] video {
+    filter: blur(12px) !important;
+    transition: 0.3s;
+}
+body.wa-hover-reveal.wa-blur-chat-media div[role="application"] img:hover,
+body.wa-hover-reveal.wa-blur-chat-media div[role="application"] video:hover {
+    filter: none !important;
+}
+
+/* Chat Header: Name */
+body.wa-blur-chat-name header span[title] {
+    filter: blur(5px) !important;
+    transition: 0.3s;
+}
+body.wa-hover-reveal.wa-blur-chat-name header span[title]:hover {
+    filter: none !important;
+}
+
+/* Chat Header: Photo */
+body.wa-blur-chat-photo header img {
+    filter: blur(5px) !important;
+    transition: 0.3s;
+}
+body.wa-hover-reveal.wa-blur-chat-photo header img:hover {
+    filter: none !important;
 }

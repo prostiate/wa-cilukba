@@ -9,12 +9,18 @@ interface PrivacyContextType {
 
 const defaultSettings: PrivacySettings = {
   enableExtension: true,
-  blurMessages: true,
-  blurPreviews: true,
-  blurMedia: true,
-  blurProfilePhotos: true,
-  blurNames: false,
   hoverToReveal: true,
+  
+  // Sidebar defaults
+  sidebarBlurName: false,
+  sidebarBlurPhoto: true,
+  sidebarBlurPreview: true,
+
+  // Chat defaults
+  chatBlurName: false,
+  chatBlurPhoto: true,
+  chatBlurMessage: true,
+  chatBlurMedia: true,
 };
 
 const PrivacyContext = createContext<PrivacyContextType | undefined>(undefined);

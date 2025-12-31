@@ -1,7 +1,7 @@
 import React from 'react';
 import { usePrivacy } from '../context/PrivacyContext';
 import { Toggle } from './ui/Toggle';
-import { Shield, ShieldAlert, Settings, EyeOff } from 'lucide-react';
+import { Shield, LayoutPanelLeft, MessageSquare, MousePointerClick } from 'lucide-react';
 
 export const ControlPanel: React.FC = () => {
   const { settings, updateSetting, toggleMasterSwitch } = usePrivacy();
@@ -16,7 +16,7 @@ export const ControlPanel: React.FC = () => {
         <p className="text-teal-100 text-sm">For WhatsApp Web</p>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 overflow-y-auto p-6 space-y-8">
         
         {/* Global Toggle */}
         <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
@@ -28,69 +28,92 @@ export const ControlPanel: React.FC = () => {
             />
         </div>
 
-        {/* Granular Controls */}
-        <div className="space-y-1">
-            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Message Content</h3>
-            <Toggle 
-                label="Blur Recent Messages" 
-                checked={settings.blurMessages} 
-                onChange={(v) => updateSetting('blurMessages', v)}
-                disabled={!settings.enableExtension}
-            />
-            <Toggle 
-                label="Blur Message Previews" 
-                description="Left sidebar text"
-                checked={settings.blurPreviews} 
-                onChange={(v) => updateSetting('blurPreviews', v)}
-                disabled={!settings.enableExtension}
-            />
-            <Toggle 
-                label="Blur Media" 
-                description="Images, Videos, Stickers"
-                checked={settings.blurMedia} 
-                onChange={(v) => updateSetting('blurMedia', v)}
-                disabled={!settings.enableExtension}
-            />
+        {/* SECTION: LEFT SIDEBAR */}
+        <div>
+            <div className="flex items-center space-x-2 mb-3 text-gray-500">
+                <LayoutPanelLeft className="w-4 h-4" />
+                <h3 className="text-xs font-bold uppercase tracking-wider">Left Sidebar (Chat List)</h3>
+            </div>
+            <div className="space-y-1 pl-2 border-l-2 border-gray-100">
+                 <Toggle 
+                    label="Blur Contact Names" 
+                    checked={settings.sidebarBlurName} 
+                    onChange={(v) => updateSetting('sidebarBlurName', v)}
+                    disabled={!settings.enableExtension}
+                />
+                <Toggle 
+                    label="Blur Profile Photos" 
+                    checked={settings.sidebarBlurPhoto} 
+                    onChange={(v) => updateSetting('sidebarBlurPhoto', v)}
+                    disabled={!settings.enableExtension}
+                />
+                <Toggle 
+                    label="Blur Last Message" 
+                    description="Hide message previews"
+                    checked={settings.sidebarBlurPreview} 
+                    onChange={(v) => updateSetting('sidebarBlurPreview', v)}
+                    disabled={!settings.enableExtension}
+                />
+            </div>
         </div>
 
-        <div className="border-t border-gray-100 my-2"></div>
-
-        <div className="space-y-1">
-            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Contact Details</h3>
-            <Toggle 
-                label="Blur Profile Photos" 
-                checked={settings.blurProfilePhotos} 
-                onChange={(v) => updateSetting('blurProfilePhotos', v)}
-                disabled={!settings.enableExtension}
-            />
-             <Toggle 
-                label="Blur Contact Names" 
-                checked={settings.blurNames} 
-                onChange={(v) => updateSetting('blurNames', v)}
-                disabled={!settings.enableExtension}
-            />
+        {/* SECTION: ACTIVE CHAT */}
+        <div>
+            <div className="flex items-center space-x-2 mb-3 text-gray-500">
+                <MessageSquare className="w-4 h-4" />
+                <h3 className="text-xs font-bold uppercase tracking-wider">Active Chat Content</h3>
+            </div>
+            <div className="space-y-1 pl-2 border-l-2 border-gray-100">
+                <Toggle 
+                    label="Blur Messages" 
+                    checked={settings.chatBlurMessage} 
+                    onChange={(v) => updateSetting('chatBlurMessage', v)}
+                    disabled={!settings.enableExtension}
+                />
+                 <Toggle 
+                    label="Blur Media" 
+                    description="Images, Videos, Stickers"
+                    checked={settings.chatBlurMedia} 
+                    onChange={(v) => updateSetting('chatBlurMedia', v)}
+                    disabled={!settings.enableExtension}
+                />
+                 <Toggle 
+                    label="Blur Contact Name" 
+                    description="Header name"
+                    checked={settings.chatBlurName} 
+                    onChange={(v) => updateSetting('chatBlurName', v)}
+                    disabled={!settings.enableExtension}
+                />
+                <Toggle 
+                    label="Blur Profile Photo" 
+                    description="Header photo"
+                    checked={settings.chatBlurPhoto} 
+                    onChange={(v) => updateSetting('chatBlurPhoto', v)}
+                    disabled={!settings.enableExtension}
+                />
+            </div>
         </div>
 
-        <div className="border-t border-gray-100 my-2"></div>
-
-        <div className="space-y-1">
-             <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Interactivity</h3>
-             <Toggle 
-                label="Hover to Reveal" 
-                description="Temporarily unblur on mouseover"
-                checked={settings.hoverToReveal} 
-                onChange={(v) => updateSetting('hoverToReveal', v)}
-                disabled={!settings.enableExtension}
-            />
+        {/* SECTION: INTERACTIVITY */}
+        <div>
+             <div className="flex items-center space-x-2 mb-3 text-gray-500">
+                <MousePointerClick className="w-4 h-4" />
+                <h3 className="text-xs font-bold uppercase tracking-wider">Interactivity</h3>
+            </div>
+            <div className="space-y-1 pl-2 border-l-2 border-gray-100">
+                 <Toggle 
+                    label="Hover to Reveal" 
+                    description="Temporarily unblur on mouseover"
+                    checked={settings.hoverToReveal} 
+                    onChange={(v) => updateSetting('hoverToReveal', v)}
+                    disabled={!settings.enableExtension}
+                />
+            </div>
         </div>
       </div>
 
       <div className="p-4 bg-gray-50 border-t border-gray-200 text-xs text-gray-500 flex justify-between items-center">
-        <span>v2.4.0 • MIT License</span>
-        <button className="text-teal-600 hover:underline flex items-center space-x-1">
-            <Settings className="w-3 h-3" />
-            <span>More Settings</span>
-        </button>
+        <span>v3.0.0 • MIT License</span>
       </div>
     </div>
   );

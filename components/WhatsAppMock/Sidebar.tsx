@@ -18,11 +18,16 @@ const contacts: Contact[] = [
 export const Sidebar: React.FC = () => {
   const { settings } = usePrivacy();
 
+  // Mapping new settings
+  const isBlurPhoto = settings.sidebarBlurPhoto;
+  const isBlurName = settings.sidebarBlurName;
+  const isBlurPreview = settings.sidebarBlurPreview;
+
   return (
     <div className="w-[400px] h-full flex flex-col border-r border-gray-200 bg-white">
       {/* Header */}
       <div className="h-16 bg-[#f0f2f5] flex items-center justify-between px-4 py-2 shrink-0">
-        <Avatar src="https://picsum.photos/200?random=99" size="md" />
+        <Avatar src="https://picsum.photos/200?random=99" size="md" blurOverride={isBlurPhoto} />
         <div className="flex space-x-4 text-gray-600">
            <CircleDashed className="w-6 h-6 cursor-pointer" />
            <MessageSquarePlus className="w-6 h-6 cursor-pointer" />
@@ -42,11 +47,11 @@ export const Sidebar: React.FC = () => {
         {contacts.map((contact) => (
           <div key={contact.id} className="flex items-center p-3 hover:bg-[#f5f6f6] cursor-pointer group transition-colors">
             <div className="mr-3">
-               <Avatar src={contact.avatar} size="lg" />
+               <Avatar src={contact.avatar} size="lg" blurOverride={isBlurPhoto} />
             </div>
             <div className="flex-1 border-b border-gray-100 pb-3 group-hover:border-transparent min-w-0">
               <div className="flex justify-between items-baseline mb-1">
-                <BlurText active={settings.blurNames} className="font-medium text-gray-900 truncate">
+                <BlurText active={isBlurName} className="font-medium text-gray-900 truncate">
                   {contact.name}
                 </BlurText>
                 <span className={`text-xs ${contact.unread > 0 ? 'text-teal-500 font-medium' : 'text-gray-400'}`}>
@@ -54,7 +59,7 @@ export const Sidebar: React.FC = () => {
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                 <BlurText active={settings.blurPreviews} className="text-sm text-gray-500 truncate w-full pr-2">
+                 <BlurText active={isBlurPreview} className="text-sm text-gray-500 truncate w-full pr-2">
                     {contact.lastMessage}
                  </BlurText>
                  {contact.unread > 0 && (

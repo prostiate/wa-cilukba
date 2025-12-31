@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { PrivacyProvider } from './context/PrivacyContext';
 import { MockWhatsAppLayout } from './components/WhatsAppMock/Layout';
 import { ControlPanel } from './components/ControlPanel';
-import { Menu, X, Download } from 'lucide-react';
+import { LandingPage } from './components/LandingPage';
+import { Menu, X, Download, ArrowLeft } from 'lucide-react';
 import { downloadExtension } from './utils/extensionGenerator';
 
-const AppContent: React.FC = () => {
+const Simulator: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   const handleDownload = () => {
-    // In a real scenario, this might show a modal with instructions
     if (confirm("Download the Extension Source Code?\n\nTo install:\n1. Unzip the file\n2. Go to chrome://extensions\n3. Enable 'Developer Mode'\n4. Click 'Load Unpacked'")) {
         downloadExtension();
     }
@@ -20,6 +20,9 @@ const AppContent: React.FC = () => {
       {/* Marketing Header */}
       <header className="bg-slate-800 text-white p-4 flex justify-between items-center shadow-md z-50 shrink-0">
         <div className="flex items-center space-x-3">
+             <button onClick={onBack} className="p-2 hover:bg-slate-700 rounded-full transition-colors mr-2">
+                <ArrowLeft className="w-5 h-5 text-gray-300" />
+             </button>
             <div className="bg-teal-500 p-2 rounded-lg">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -88,9 +91,15 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const [view, setView] = useState<'landing' | 'app'>('landing');
+
   return (
     <PrivacyProvider>
-      <AppContent />
+      {view === 'landing' ? (
+        <LandingPage onStartDemo={() => setView('app')} />
+      ) : (
+        <Simulator onBack={() => setView('landing')} />
+      )}
     </PrivacyProvider>
   );
 };
