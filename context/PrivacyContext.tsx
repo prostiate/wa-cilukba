@@ -5,6 +5,8 @@ interface PrivacyContextType {
   settings: PrivacySettings;
   updateSetting: (key: keyof PrivacySettings, value: boolean) => void;
   toggleMasterSwitch: () => void;
+  activeChatId: string;
+  setActiveChatId: (id: string) => void;
 }
 
 const defaultSettings: PrivacySettings = {
@@ -21,12 +23,14 @@ const defaultSettings: PrivacySettings = {
   chatBlurPhoto: true,
   chatBlurMessage: true,
   chatBlurMedia: true,
+  chatBlurGroupParticipant: true,
 };
 
 const PrivacyContext = createContext<PrivacyContextType | undefined>(undefined);
 
 export const PrivacyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [settings, setSettings] = useState<PrivacySettings>(defaultSettings);
+  const [activeChatId, setActiveChatId] = useState<string>('1'); // Default to Alice
 
   const updateSetting = (key: keyof PrivacySettings, value: boolean) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
@@ -48,7 +52,7 @@ export const PrivacyProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, []);
 
   return (
-    <PrivacyContext.Provider value={{ settings, updateSetting, toggleMasterSwitch }}>
+    <PrivacyContext.Provider value={{ settings, updateSetting, toggleMasterSwitch, activeChatId, setActiveChatId }}>
       {children}
     </PrivacyContext.Provider>
   );

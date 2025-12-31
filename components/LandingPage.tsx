@@ -41,7 +41,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartDemo }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-medium mb-8">
             <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-            v3.0 Now Available with Granular Controls
+            v1.0 Now Available with Group Chat Support
           </div>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-400">
             Privacy for WhatsApp Web <br /> Made Simple.

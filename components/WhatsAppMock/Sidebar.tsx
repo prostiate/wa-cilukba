@@ -3,20 +3,20 @@ import { Contact } from '../../types';
 import { Avatar } from './Avatar';
 import { BlurText } from './BlurText';
 import { usePrivacy } from '../../context/PrivacyContext';
-import { MessageSquarePlus, MoreVertical, CircleDashed } from 'lucide-react';
+import { MessageSquarePlus, MoreVertical, CircleDashed, Users } from 'lucide-react';
 
-const contacts: Contact[] = [
+export const contacts: Contact[] = [
   { id: '1', name: 'Alice Freeman', avatar: 'https://picsum.photos/200?random=1', lastMessage: 'See you at the meeting tomorrow!', time: '10:42 AM', unread: 2 },
-  { id: '2', name: 'Team Alpha', avatar: 'https://picsum.photos/200?random=2', lastMessage: 'John: Please check the latest deployment logs.', time: 'Yesterday', unread: 0 },
+  { id: '2', name: 'Team Alpha 🚀', avatar: 'https://picsum.photos/200?random=2', lastMessage: 'John: Please check the latest deployment logs.', time: '10:30 AM', unread: 5, isGroup: true },
   { id: '3', name: 'Mom', avatar: 'https://picsum.photos/200?random=3', lastMessage: 'Call me when you are free.', time: 'Yesterday', unread: 0 },
   { id: '4', name: 'Sarah Designer', avatar: 'https://picsum.photos/200?random=4', lastMessage: '📷 Photo', time: 'Tuesday', unread: 0 },
-  { id: '5', name: 'Gym Buddies', avatar: 'https://picsum.photos/200?random=5', lastMessage: 'Mike: Leg day today?', time: 'Monday', unread: 1 },
+  { id: '5', name: 'Gym Buddies', avatar: 'https://picsum.photos/200?random=5', lastMessage: 'Mike: Leg day today?', time: 'Monday', unread: 1, isGroup: true },
   { id: '6', name: 'Unknown Number', avatar: 'https://picsum.photos/200?random=6', lastMessage: 'Your package has arrived.', time: 'Sunday', unread: 0 },
   { id: '7', name: 'David Smith', avatar: 'https://picsum.photos/200?random=7', lastMessage: 'Can you send the report?', time: 'Last week', unread: 0 },
 ];
 
 export const Sidebar: React.FC = () => {
-  const { settings } = usePrivacy();
+  const { settings, activeChatId, setActiveChatId } = usePrivacy();
 
   // Mapping new settings
   const isBlurPhoto = settings.sidebarBlurPhoto;
@@ -45,9 +45,18 @@ export const Sidebar: React.FC = () => {
       {/* Contact List */}
       <div className="flex-1 overflow-y-auto">
         {contacts.map((contact) => (
-          <div key={contact.id} className="flex items-center p-3 hover:bg-[#f5f6f6] cursor-pointer group transition-colors">
-            <div className="mr-3">
+          <div 
+            key={contact.id} 
+            onClick={() => setActiveChatId(contact.id)}
+            className={`flex items-center p-3 cursor-pointer group transition-colors ${activeChatId === contact.id ? 'bg-[#f0f2f5]' : 'hover:bg-[#f5f6f6]'}`}
+          >
+            <div className="mr-3 relative">
                <Avatar src={contact.avatar} size="lg" blurOverride={isBlurPhoto} />
+               {contact.isGroup && !isBlurPhoto && (
+                   <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-0.5">
+                       <Users className="w-3 h-3 text-gray-500" />
+                   </div>
+               )}
             </div>
             <div className="flex-1 border-b border-gray-100 pb-3 group-hover:border-transparent min-w-0">
               <div className="flex justify-between items-baseline mb-1">

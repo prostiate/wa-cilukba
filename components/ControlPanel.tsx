@@ -78,17 +78,24 @@ export const ControlPanel: React.FC = () => {
                     disabled={!settings.enableExtension}
                 />
                  <Toggle 
-                    label="Blur Contact Name" 
-                    description="Header name"
+                    label="Blur Header Name" 
+                    description="Chat Title"
                     checked={settings.chatBlurName} 
                     onChange={(v) => updateSetting('chatBlurName', v)}
                     disabled={!settings.enableExtension}
                 />
                 <Toggle 
-                    label="Blur Profile Photo" 
-                    description="Header photo"
+                    label="Blur Header Photo" 
+                    description="Profile/Group Icon"
                     checked={settings.chatBlurPhoto} 
                     onChange={(v) => updateSetting('chatBlurPhoto', v)}
+                    disabled={!settings.enableExtension}
+                />
+                <Toggle 
+                    label="Blur Group Participants" 
+                    description="Names inside chat bubbles"
+                    checked={settings.chatBlurGroupParticipant} 
+                    onChange={(v) => updateSetting('chatBlurGroupParticipant', v)}
                     disabled={!settings.enableExtension}
                 />
             </div>
@@ -113,7 +120,7 @@ export const ControlPanel: React.FC = () => {
       </div>
 
       <div className="p-4 bg-gray-50 border-t border-gray-200 text-xs text-gray-500 flex justify-between items-center">
-        <span>v3.0.0 • MIT License</span>
+        <span>v1.0.0 • MIT License</span>
       </div>
     </div>
   );

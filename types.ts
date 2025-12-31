@@ -12,6 +12,7 @@ export interface PrivacySettings {
   chatBlurPhoto: boolean;
   chatBlurMessage: boolean;
   chatBlurMedia: boolean;
+  chatBlurGroupParticipant: boolean; // New: Blur participant names in groups
 }
 
 export interface Contact {
@@ -21,6 +22,7 @@ export interface Contact {
   lastMessage: string;
   time: string;
   unread: number;
+  isGroup?: boolean; // New: Identify if it's a group
 }
 
 export interface Message {
@@ -28,6 +30,8 @@ export interface Message {
   text?: string;
   image?: string;
   sender: 'me' | 'them';
+  senderName?: string; // New: For group chats
+  senderColor?: string; // New: For group chats
   time: string;
   isMedia?: boolean;
 }
