@@ -48,6 +48,11 @@ export const downloadExtension = async () => {
         filter: blur(0px) !important;
     }
 
+    /* --- GLOBAL TRANSITION --- */
+    body.wa-hover-reveal * {
+        transition: filter 0.3s ease-in-out !important;
+    }
+
     /* --- SIDEBAR --- */
     
     /* Sidebar Names */
@@ -136,6 +141,16 @@ export const downloadExtension = async () => {
         filter: blur(5px) !important;
     }
     body.wa-hover-reveal.wa-blur-chat-group-participant .message-in:hover ._ahxj span {
+        filter: none !important;
+    }
+
+    /* Group Participant Photos in Active Chat */
+    body.wa-blur-chat-photo #main img[src^="https://media"],
+    body.wa-blur-chat-photo #main div[role="button"][aria-label^="Open chat details"] img {
+        filter: blur(10px) !important;
+    }
+    body.wa-hover-reveal.wa-blur-chat-photo #main img[src^="https://media"]:hover,
+    body.wa-hover-reveal.wa-blur-chat-photo #main div[role="button"][aria-label^="Open chat details"]:hover img {
         filter: none !important;
     }
   `

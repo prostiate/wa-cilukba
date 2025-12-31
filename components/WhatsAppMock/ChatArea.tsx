@@ -211,10 +211,23 @@ export const ChatArea: React.FC = () => {
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={`flex ${
-              msg.sender === "me" ? "justify-end" : "justify-start"
+            className={`flex items-end gap-2 mb-1 ${
+              msg.sender === "me" ? "flex-row-reverse" : "flex-row"
             }`}
           >
+            {/* Participant Avatar (only for groups) */}
+            {activeContact.isGroup && msg.sender !== "me" ? (
+              <div className="flex-shrink-0 mb-1">
+                <Avatar
+                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${msg.senderName}`}
+                  size="xs"
+                  blurOverride={settings.chatBlurPhoto}
+                />
+              </div>
+            ) : msg.sender !== "me" ? (
+              <div className="w-8"></div>
+            ) : null}
+
             <div
               className={`max-w-[70%] rounded-lg p-1 shadow-sm relative text-sm ${
                 msg.sender === "me" ? "bg-[#d9fdd3]" : "bg-white"
