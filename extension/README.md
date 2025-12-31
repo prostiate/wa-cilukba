@@ -10,5 +10,5 @@
 6.  Select this `extension` folder.
 7.  The extension is now installed! Open [web.whatsapp.com](https://web.whatsapp.com) to see it in action.
 
-## Notes
-- If you see a warning about a missing `icon.png`, you can add any 128x128 PNG image named `icon.png` to this folder, or simply ignore the warning as it does not affect functionality.
+## Troubleshooting
+- If changes don't appear immediately on WhatsApp Web, refresh the WhatsApp Web tab after installing or toggling settings.
