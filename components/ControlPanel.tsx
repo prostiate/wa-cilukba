@@ -11,9 +11,9 @@ export const ControlPanel: React.FC = () => {
       <div className="p-6 bg-teal-600 text-white">
         <div className="flex items-center space-x-2 mb-2">
           <Shield className="w-6 h-6" />
-          <h2 className="text-xl font-bold">Privacy Extension</h2>
+          <h2 className="text-xl font-bold">WA Cilukba</h2>
         </div>
-        <p className="text-teal-100 text-sm">For WhatsApp Web</p>
+        <p className="text-teal-100 text-sm">Peek-a-boo for WhatsApp Web</p>
       </div>
 
       <div className="flex-1 overflow-y-auto p-6 space-y-8">

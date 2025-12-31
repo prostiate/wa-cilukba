@@ -1,7 +1,7 @@
 {
-  "name": "wa-cilukba",
-  "private": false,
-  "version": "1.0.0",
+  "name": "wa-cilukba-demo",
+  "private": true,
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
